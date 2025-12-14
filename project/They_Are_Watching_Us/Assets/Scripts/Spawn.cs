@@ -6,10 +6,18 @@ using Photon.Pun;
 public class Spawn : MonoBehaviour
 {
     [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject ObjectCam;
     [SerializeField] private Transform _spawn;
+    public static Camera mainCamera;
 
     void Start()
     {
         PhotonNetwork.Instantiate(_player.name, _spawn.position, Quaternion.identity);
+        mainCamera = ObjectCam.GetComponent<Camera>();
+        Instantiate(mainCamera, new Vector3(0, 0, 0), Quaternion.identity);
+    }
+    void Update()
+    {
+        _player.GetComponent<PlayerMoves>().enabled = true;
     }
 }
