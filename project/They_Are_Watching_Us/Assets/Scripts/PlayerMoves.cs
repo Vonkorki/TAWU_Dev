@@ -18,6 +18,7 @@ public class CameraSettings
     public string zoomAxis = "Mouse ScrollWheel";
     public bool invertZoom = false;
     public KeyCode resetZoomKey = KeyCode.R;
+
 }
 
 [System.Serializable]
@@ -28,7 +29,7 @@ public class MovementSettings
     [Range(100f, 2000f)] public float rotationSpeed = 720f;
     [Range(5f, 50f)] public float acceleration = 15f;
     [Range(5f, 50f)] public float deceleration = 10f;
-    
+
     [Header("Advanced")]
     public bool usePhysics = false;
     public float gravity = -9.81f;
@@ -42,6 +43,7 @@ public class PlayerMoves: MonoBehaviour
     [SerializeField] private MovementSettings movementSettings = new MovementSettings();
     
     [Header("References")]
+    [SerializeField] private Animator animator;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Transform cameraPivot;
     
@@ -55,6 +57,9 @@ public class PlayerMoves: MonoBehaviour
     private Vector3 cameraVelocity;
     private float verticalVelocity;
     private bool isGrounded;
+    //hash
+    private int idleHash;
+    private int walkHash;
     
     // Properties
     public float CurrentZoomPercentage => Mathf.InverseLerp(
@@ -64,6 +69,9 @@ public class PlayerMoves: MonoBehaviour
     );
     void Start()
     {
+        // animator = GetComponent<Animator>();
+        idleHash = Animator.StringToHash("idle");
+        walkHash = Animator.StringToHash("walk");
         playerCamera = Camera.main;
     }
     void Awake()
@@ -165,6 +173,7 @@ public class PlayerMoves: MonoBehaviour
         
         if (moveInput.magnitude > 0.1f)
         {
+            animator.SetTrigger(walkHash);
             // Get camera-relative movement
             Vector3 cameraForward = playerCamera.transform.forward;
             cameraForward.y = 0;
@@ -192,6 +201,7 @@ public class PlayerMoves: MonoBehaviour
         }
         else
         {
+            animator.SetTrigger(idleHash);
             // Deceleration when no input
             currentVelocity = Vector3.Lerp(
                 currentVelocity, 
@@ -216,7 +226,7 @@ public class PlayerMoves: MonoBehaviour
             verticalVelocity, 
             currentVelocity.z
         );
-        
+
         characterController.Move(finalMovement * Time.deltaTime);
         
         // Ground check

@@ -13,7 +13,7 @@ public class IsMineCheck : MonoBehaviour
     void Start()
     {
         //Все атрибуты другого игрока
-        if (_photonView.IsMine)
+        if (!_photonView.IsMine)
         {
             _camera.enabled = false;
             move.enabled = false;

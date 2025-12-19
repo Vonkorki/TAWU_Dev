@@ -13,11 +13,10 @@ public class Spawn : MonoBehaviour
     void Start()
     {
         PhotonNetwork.Instantiate(_player.name, _spawn.position, Quaternion.identity);
-        mainCamera = ObjectCam.GetComponent<Camera>();
-        Instantiate(mainCamera, new Vector3(0, 0, 0), Quaternion.identity);
+        // Instantiate(ObjectCam, new Vector3(0, 0, 0), Quaternion.identity);
     }
     void Update()
     {
-        _player.GetComponent<PlayerMoves>().enabled = true;
+        // _player.GetComponent<PlayerMoves>().enabled = true;
     }
 }
